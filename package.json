@@ -1,0 +1,56 @@
+{
+  "name": "vibrant",
+  "version": "0.0.0",
+  "author": {
+    "name": "David Sima",
+    "email": "hello@david-sima.dev",
+    "url": "https://github.com/The24thDS"
+  },
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview",
+    "lint": "eslint src --ext .tsx --ext .ts",
+    "lint:fix": "yarn lint --fix",
+    "format": "prettier --config ./.prettierrc -w 'src/**/*.{tsx,ts}' && git update-index --again",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.8.1",
+    "@emotion/styled": "^11.8.1",
+    "@hookform/resolvers": "^3.3.4",
+    "@tanstack/react-query": "^5.28.4",
+    "@vkontakte/vkui": "^6.0.1",
+    "axios": "^1.6.8",
+    "framer-motion": "^8.5.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.51.1",
+    "yup": "^1.4.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.5",
+    "@types/react": "^18.0.27",
+    "@types/react-dom": "^18.0.10",
+    "@typescript-eslint/eslint-plugin": "^5.12.1",
+    "@typescript-eslint/parser": "^5.12.1",
+    "@vitejs/plugin-react": "^3.0.1",
+    "eslint": "^8.9.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.4.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-simple-import-sort": "^9.0.0",
+    "husky": "^8.0.3",
+    "identity-obj-proxy": "^3.0.0",
+    "prettier": "^2.5.1",
+    "rollup": "^3.10.1",
+    "typescript": "^4.5.5",
+    "vite": "^4.0.4"
+  }
+}
