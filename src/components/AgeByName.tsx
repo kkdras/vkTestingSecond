@@ -1,21 +1,22 @@
-import {
-  PanelHeader,
-  Group,
-  Input,
-  Spacing,
-  CellButton,
-  FormItem,
-  Text,
-  Spinner,
-  Button
-} from '@vkontakte/vkui';
-import { page1, schema } from '../constants';
-import { useForm } from 'react-hook-form';
+import axios from 'axios';
+import { useEffect, useRef } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+
 import { yupResolver } from '@hookform/resolvers/yup';
 import { queryOptions, useQuery } from '@tanstack/react-query';
-import { useEffect, useRef } from 'react';
+import {
+  Button,
+  CellButton,
+  FormItem,
+  Group,
+  Input,
+  PanelHeader,
+  Spacing,
+  Spinner,
+  Text,
+} from '@vkontakte/vkui';
 
-import axios from 'axios';
+import { page1, schema } from '../constants';
 
 type PropsType = {
   setActivePanel: (val: string) => void;
@@ -25,23 +26,18 @@ type FormData = {
   name: string;
 };
 
-const groupOptions = (name: string) => {
-  return queryOptions({
+const groupOptions = (name: string) =>
+  queryOptions({
     queryKey: ['getAgeByName', name],
     enabled: false,
-    queryFn: async () => {
-      const res = await axios.get<{ age: number }>(
-        `https://api.agify.io/?name=${name}`
-      );
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      return res;
-    },
+    queryFn: () =>
+      axios.get<{ age: number }>(`https://api.agify.io/?name=${name}`),
   });
-};
 
-export const AgeByName = ({ setActivePanel }: PropsType) => {
-  const { watch, handleSubmit, register, formState } = useForm<FormData>({
+export function AgeByName({ setActivePanel }: PropsType) {
+  const { watch, handleSubmit, control, formState } = useForm<FormData>({
     resolver: yupResolver(schema),
+    defaultValues: { name: '' },
   });
 
   const timeoutId = useRef<number>();
@@ -49,16 +45,16 @@ export const AgeByName = ({ setActivePanel }: PropsType) => {
   const { isFetching, data, refetch } = useQuery(groupOptions(name));
 
   const onSubmit = () => {
-    debugger
     refetch();
     if (timeoutId.current) clearTimeout(timeoutId.current);
   };
 
   useEffect(() => {
+    if (timeoutId.current) clearTimeout(timeoutId.current);
     timeoutId.current = setTimeout(() => {
       handleSubmit(onSubmit)();
-    }, 3000)
-  }, [name])
+    }, 3000);
+  }, [name]);
 
   return (
     <>
@@ -68,33 +64,45 @@ export const AgeByName = ({ setActivePanel }: PropsType) => {
           <FormItem
             htmlFor="name"
             top="Name"
-            status={formState.errors.name ? 'valid' : 'error'}
+            status={formState?.errors?.name ? 'error' : 'valid'}
             bottomId="name"
           >
-            <Input
-              aria-labelledby="name"
-              id="name"
-              type="string"
-              required
-              {...register('name')}
+            <Controller
+              control={control}
+              name="name"
+              render={({ field: { onChange, onBlur, value, ref } }) => (
+                <Input
+                  aria-labelledby="name"
+                  id="name"
+                  type="string"
+                  onChange={onChange} // send value to hook form
+                  onBlur={onBlur} // notify when input is touched/blur
+                  value={value}
+                />
+              )}
             />
           </FormItem>
-
-          <Button type='submit' style={{ marginLeft: '16px' }}>Check your age</Button>
+          <Button type="submit" style={{ marginLeft: '16px' }}>
+            Check your age
+          </Button>
         </form>
 
         <Spacing size={16} />
 
-        {isFetching && <Spinner />}
+        {isFetching && <Spinner style={{ marginLeft: '16px' }} />}
 
-        {data?.data && <Text>Your age is {data.data.age}</Text>}
+        {data?.data && (
+          <Text style={{ marginLeft: '16px', display: 'block' }}>
+            Your age is {data.data.age}
+          </Text>
+        )}
 
         <Spacing size={16} />
 
         <CellButton onClick={() => setActivePanel(page1)}>
-          Go to the "Funny fact" page
+          Go to the &quot;Funny fact&quot; page
         </CellButton>
       </Group>
     </>
   );
-};
+}

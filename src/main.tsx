@@ -1,8 +1,9 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 
-import { ConfigProvider } from '@vkontakte/vkui';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ConfigProvider } from '@vkontakte/vkui';
+
 import { App } from './App';
 
 const container = document.getElementById('root');
